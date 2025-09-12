@@ -1,9 +1,25 @@
 import sqlite3
 from flight import Flight
 
+import psycopg2
+from psycopg2 import sql
 
 class FlightService:
-    def __init__(self, db_name: str = ""):
+    def __init__(self, db_name: str = "",
+                 host: str = "",
+                 user: str = "",
+                 password: str = "",
+                 port: str= ""):
+        self.connection_parameters = {
+            'host':host,
+            'db_name':db_name,
+            'user':user,
+            'password':password,
+            'port':port
+
+        }
+        self.init_db()
+
         self.db_name = db_name
         self.init_db()
 
@@ -16,8 +32,8 @@ class FlightService:
             conn.execute('''
                 CREATE TABLE IF NOT EXISTS flights(
                          id INTEGER PRIMARY KEY AUTOINCREMENT,
-                         plane TEXT NOT NULL,
-                         price REAL NOT NULL
+                         plane VARCHAR(100) NOT NULL,
+                         price DECIMAL( NOT NULL
                          )
                 ''')
             conn.commit()
